@@ -13,6 +13,7 @@ class Menu:
                 self.which_aliment_substitute()
 
             elif r == 2:
+
                 self.display_substitute_aliments()
             else:
                 raise Exception('message')
@@ -32,9 +33,18 @@ class Menu:
                 for i in range (0, len(toprint)):
                     print (toprint[i])
 
-                print ("--------------------")
+
                 val = self.select_aliment(len(toprint))
-                print (val)
+
+                a = self.db.fetchall_nutriscore("plats_prepares", val)
+                a = sorted(a, key= lambda nutriscore:nutriscore[3] )
+
+
+                print ("voulez-vous enregistrer")
+                print(a[0])
+                ret = int (input(""))
+                if ret == 1:
+                    self.db.save_element(a[0])
 
             else:
                 sys.exit(-1)
@@ -52,10 +62,12 @@ class Menu:
         except:
             self.select_aliment(l)
         return 0
+
     def display_substitute_aliments(self):
-        print("faites un choix parmis les produits suivants")
-        # try:
-        #     r = int(input ("faites un choix parmis les produits suivants\
+
+        self.db.print_fav()
+
+
 
 menu = Menu()
 menu.first_question()
